@@ -15,8 +15,165 @@
 
 :root {
   --font-primary: 'Inter';
+
+
+    /* Za boje ispod sam pitao AI da uklopi sa logom aplikacije, ali nzm jel odgovaraju */
+    --color-primary:          #0066CC;
+    --color-primary-dark:     #003A7A;
+    --color-primary-light:    #4DA6FF;
+
+    --color-accent:           #FF6B00;
+    --color-accent-dark:      #CC4400;
+    --color-accent-light:     #FF9A4D;
+
+    --color-secondary:        #E8131B;
+
+    --color-white:            #FFFFFF;
+    --color-black:            #000000;
+    --color-dark:             #1A1A2E;
+    --color-gray-dark:        #4B5563;
+    --color-gray:             #9CA3AF;
+    --color-gray-light:       #E5E7EB;
+    --color-gray-ultra-light: #F9FAFB;
+
+    --color-bg-primary:       #FFFFFF;
+    --color-bg-secondary:     #F3F4F6;
+    --color-bg-accent:        #FFF7F0;
+    --color-bg-dark:          #1A1A2E;
+
+    --color-text-primary:     #1A1A2E;
+    --color-text-secondary:   #4B5563;
+    --color-text-muted:       #9CA3AF;
+    --color-text-inverse:     #FFFFFF;
+    --color-text-accent:      #FF6B00;
+
+    --color-border:           #E5E7EB;
+    --color-border-dark:      #D1D5DB;
+
+    --color-success:          #16A34A;
+    --color-success-light:    #DCFCE7;
+    --color-warning:          #F59E0B;
+    --color-warning-light:    #FEF3C7;
+    --color-error:            #DC2626;
+    --color-error-light:      #FEE2E2;
+    --color-info:             #0EA5E9;
+    --color-info-light:       #E0F2FE;
 }
 
 body {
   font-family: var(--font-primary), sans-serif;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 10px;
+  background-color: var(--color-primary-dark);
+  outline: 2px var(--color-primary-dark) solid;
+  outline-offset: -2px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 1em;
+  color: var(--color-text-inverse);
+  text-decoration: none;
+  transition: 400ms;
+
+  &:hover {
+    background-color: transparent;
+    color: var(--color-primary-dark);
+  }
+
+  &--accent {
+    background-color: var(--color-accent);
+    outline-color: var(--color-accent);
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  &--secondary {
+    background-color: transparent;
+    color: var(--color-primary-dark);
+
+    &:hover {
+      background-color: var(--color-primary-dark);
+      color: var(--color-text-inverse);
+    }
+  }
+
+  &--danger {
+    background-color: var(--color-error);
+    outline-color: var(--color-error);
+
+    &:hover {
+      color: var(--color-error);
+    }
+  }
+
+  &--sm {
+    padding: 6px 12px;
+    font-size: 0.875em;
+  }
+
+  &--lg {
+    padding: 14px 28px;
+    font-size: 1.125em;
+  }
+}
+
+// For forms
+.input-container {
+  position: relative;
+  margin: 50px auto;
+  width: 200px;
+}
+
+.input-container input[type="text"] {
+  font-size: 20px;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  padding: 5px 0;
+  background-color: transparent;
+  outline: none;
+}
+
+.input-container .label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #ccc;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.input-container input[type="text"]:focus ~ .label,
+.input-container input[type="text"]:valid ~ .label {
+  top: -20px;
+  font-size: 16px;
+  color: #333;
+}
+
+.input-container .underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #333;
+  transform: scaleX(0);
+  transition: all 0.3s ease;
+}
+
+.input-container input[type="text"]:focus ~ .underline,
+.input-container input[type="text"]:valid ~ .underline {
+  transform: scaleX(1);
 }

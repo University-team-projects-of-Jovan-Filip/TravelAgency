@@ -1,1 +1,26 @@
-<p>header works!</p>
+<header class="header">
+
+  <div id="header">
+    <img ngSrc="logo/logo.png" height="150" width="150" alt="Logo is not available"/>
+    <p>Travel Agency</p>
+
+    <button class="btn lang-btn" (click)="lang.toggle()">
+      <img [src]="'/flags/' + lang.currentLang() + '.svg'" [alt]="lang.currentLang()" width="32" height="21">
+      <span class="text">{{ lang.currentLang() == 'sr' ? 'SR' : 'EN' }}</span>
+    </button>
+
+    <div class="input-container">
+      <input type="text" id="input" required="">
+      <label for="input" class="label">Search</label>
+      <div class="underline"></div>
+    </div>
+
+  </div>
+
+</header>
+
+
+
+
+
+
