@@ -61,11 +61,6 @@
   }
 }
 
-.input-container {
-  margin: 0;
-  width: 200px;
-}
-
 .lang-btn {
   padding: 10px 8px;
   gap: 6px;
@@ -89,10 +84,6 @@
 
   .main-nav ul {
     gap: 10px;
-  }
-
-  .input-container {
-    width: 170px;
   }
 }
 
@@ -135,10 +126,5 @@
 
   .lang-btn {
     order: 2;
-  }
-
-  .input-container {
-    order: 3;
-    width: 100%;
   }
 }

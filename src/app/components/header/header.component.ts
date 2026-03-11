@@ -63,12 +63,11 @@ export class HeaderComponent {
     this.isMobileMenuOpen = false;
   }
 
-  uiLabel(key: 'brand' | 'search' | 'toggleMenu' | 'mainMenu' | 'logoAlt'): string {
+  uiLabel(key: 'brand' | 'toggleMenu' | 'mainMenu' | 'logoAlt'): string {
     const isSr = this.lang.currentLang() === 'sr';
 
     const labels = {
       brand: isSr ? 'Туристичка агенција' : 'Travel Agency',
-      search: isSr ? 'Претрага' : 'Search',
       toggleMenu: isSr ? 'Отвори мени' : 'Toggle menu',
       mainMenu: isSr ? 'Главни мени' : 'Main menu',
       logoAlt: isSr ? 'Лого агенције' : 'Agency logo'
