@@ -1,0 +1,144 @@
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  p {
+    margin: 0;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  img {
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
+  }
+}
+
+.menu-toggle {
+  display: none;
+  border: 1px solid var(--color-border-dark);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.main-nav {
+  margin-left: auto;
+
+  ul {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: 600;
+  }
+
+  a.active {
+    text-decoration: underline;
+  }
+}
+
+.input-container {
+  margin: 0;
+  width: 200px;
+}
+
+.lang-btn {
+  padding: 10px 8px;
+  gap: 6px;
+  background-color: var(--color-gray); // ovo moze bolje, samo sam umoran pa necu menjati za sada
+
+  img {
+    border-radius: 3px;
+    transition: 400ms;
+  }
+
+  &:hover img {
+    filter: brightness(0.8);
+  }
+}
+
+@media (max-width: 1024px) {
+  .brand img {
+    width: 78px;
+    height: 78px;
+  }
+
+  .main-nav ul {
+    gap: 10px;
+  }
+
+  .input-container {
+    width: 170px;
+  }
+}
+
+@media (max-width: 768px) {
+  #header {
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .menu-toggle {
+    display: block;
+    margin-left: auto;
+  }
+
+  .main-nav {
+    display: none;
+    order: 4;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .main-nav.open {
+    display: block;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .main-nav a {
+    display: block;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: var(--color-bg-secondary);
+  }
+
+  .lang-btn {
+    order: 2;
+  }
+
+  .input-container {
+    order: 3;
+    width: 100%;
+  }
+}

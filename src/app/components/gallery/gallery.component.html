@@ -1,0 +1,7 @@
+<section class="gallery-grid">
+    @for (image of allImages; track image) {
+        <div class="gallery-card">
+            <img [src]="image" alt="Gallery image">
+        </div>
+    }
+</section>

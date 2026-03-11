@@ -1,0 +1,49 @@
+<header class="header">
+
+  <div id="header">
+    <div class="brand">
+      <img ngSrc="logo/logo.avif" height="150" width="150" alt="Logo is not available" />
+      <p>Travel Agency</p>
+    </div>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="isMobileMenuOpen"
+      aria-label="Toggle menu"
+    >
+      ☰
+    </button>
+
+    <nav class="main-nav" aria-label="Main menu" [class.open]="isMobileMenuOpen">
+      <ul>
+        @for (item of navItems; track item.route) {
+        <li>
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+            (click)="closeMobileMenu()"
+          >
+            {{ getLabel(item) }}
+          </a>
+        </li>
+        }
+      </ul>
+    </nav>
+
+    <button class="btn lang-btn" (click)="lang.toggle()">
+      <img [src]="'/flags/' + lang.currentLang() + '.svg'" [alt]="lang.currentLang()" width="32" height="21">
+      <span class="text">{{ lang.currentLang() == 'sr' ? 'SR' : 'EN' }}</span>
+    </button>
+
+    <div class="input-container">
+      <input type="text" id="input" required="">
+      <label for="input" class="label">Search</label>
+      <div class="underline"></div>
+    </div>
+
+  </div>
+
+</header>
