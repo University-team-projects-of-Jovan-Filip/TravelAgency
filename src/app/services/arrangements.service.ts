@@ -2,6 +2,16 @@ import { Injectable } from '@angular/core';
 
 const PHOTO_PREFIX = 'https://res.cloudinary.com/dwiysakvg/image/upload/';
 
+export interface Arrangement {
+  group: string;
+  place: string;
+  title: string;
+  price: number;
+  images: string[];
+  startDate: string;
+  endDate: string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +25,7 @@ export class ArrangementsService {
     return this.getAll().flatMap(arr => arr.images.map(image => `${PHOTO_PREFIX}${image}`));
   }
 
-  getAll() {
+  getAll(): Arrangement[] {
     return [
       {
         "group": "Evropa",

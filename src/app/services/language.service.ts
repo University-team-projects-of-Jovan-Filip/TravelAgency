@@ -10,7 +10,7 @@ export class LanguageService {
   currentLang = signal<Lang>('sr')
 
   toggle(): void {
-    this.currentLang.set(this.currentLang() == 'sr' ? 'en' : 'sr')
+    this.setLang(this.currentLang() === 'sr' ? 'en' : 'sr')
   }
 
   setLang(lang: Lang): void {
@@ -19,7 +19,7 @@ export class LanguageService {
   }
 
   loadSaved(): void {
-    const saved = localStorage.getItem('lang') as Lang
-    if (saved) this.currentLang.set(saved)
+    const saved = localStorage.getItem('lang')
+    if (saved === 'sr' || saved === 'en') this.currentLang.set(saved)
   }
 }

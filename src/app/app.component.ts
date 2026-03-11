@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {FooterComponent} from "./components/footer/footer.component";
 import { HeaderComponent } from './components/header/header.component';
+import { LanguageService } from './services/language.service';
 
 @Component({
   selector: 'app-root',
@@ -12,4 +13,8 @@ import { HeaderComponent } from './components/header/header.component';
 })
 export class AppComponent {
   title = 'TravelAgency';
+
+  constructor(private readonly languageService: LanguageService) {
+    this.languageService.loadSaved();
+  }
 }

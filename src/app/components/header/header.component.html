@@ -2,8 +2,8 @@
 
   <div id="header">
     <div class="brand">
-      <img ngSrc="logo/logo.avif" height="150" width="150" alt="Logo is not available" />
-      <p>Travel Agency</p>
+      <img ngSrc="logo/logo.avif" height="150" width="150" [alt]="uiLabel('logoAlt')" />
+      <p>{{ uiLabel('brand') }}</p>
     </div>
 
     <button
@@ -11,12 +11,12 @@
       type="button"
       (click)="toggleMobileMenu()"
       [attr.aria-expanded]="isMobileMenuOpen"
-      aria-label="Toggle menu"
+      [attr.aria-label]="uiLabel('toggleMenu')"
     >
       ☰
     </button>
 
-    <nav class="main-nav" aria-label="Main menu" [class.open]="isMobileMenuOpen">
+    <nav class="main-nav" [attr.aria-label]="uiLabel('mainMenu')" [class.open]="isMobileMenuOpen">
       <ul>
         @for (item of navItems; track item.route) {
         <li>
@@ -35,12 +35,12 @@
 
     <button class="btn lang-btn" (click)="lang.toggle()">
       <img [src]="'/flags/' + lang.currentLang() + '.svg'" [alt]="lang.currentLang()" width="32" height="21">
-      <span class="text">{{ lang.currentLang() == 'sr' ? 'SR' : 'EN' }}</span>
+      <span class="text">{{ lang.currentLang() === 'sr' ? 'SR' : 'EN' }}</span>
     </button>
 
     <div class="input-container">
       <input type="text" id="input" required="">
-      <label for="input" class="label">Search</label>
+      <label for="input" class="label">{{ uiLabel('search') }}</label>
       <div class="underline"></div>
     </div>
 
