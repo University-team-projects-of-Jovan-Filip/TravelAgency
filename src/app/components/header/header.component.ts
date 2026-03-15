@@ -67,7 +67,7 @@ export class HeaderComponent {
     const isSr = this.lang.currentLang() === 'sr';
 
     const labels = {
-      brand: isSr ? 'Туристичка агенција' : 'Travel Agency',
+      brand: isSr ? 'FJ Туристичка агенција' : 'FJ Travel Agency',
       toggleMenu: isSr ? 'Отвори мени' : 'Toggle menu',
       mainMenu: isSr ? 'Главни мени' : 'Main menu',
       logoAlt: isSr ? 'Лого агенције' : 'Agency logo'

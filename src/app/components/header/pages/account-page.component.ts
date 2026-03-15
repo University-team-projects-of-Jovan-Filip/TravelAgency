@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Arrangement } from '../../../services/arrangements.service';
 import { AccountService } from '../../../services/account.service';
 import { LanguageService } from '../../../services/language.service';
+import { ArrangementsService } from '../../../services/arrangements.service';
 
 interface VisitedItem {
   arrangement: Arrangement;
@@ -13,7 +14,9 @@ interface VisitedItem {
   standalone: true,
   template: `
     <section class="account-page">
-      <h1>{{ t('title') }}</h1>
+      <div class="account-header">
+        <h1>{{ t('title') }}</h1>
+      </div>
 
       <div class="account-grid">
         <article class="account-card">
@@ -25,8 +28,8 @@ interface VisitedItem {
             @for (arrangement of reservedArrangements; track trackByArrangement($index, arrangement)) {
               <div class="arrangement-item">
                 <h3>{{ arrangement.title }}</h3>
-                <p>{{ arrangement.place }} • {{ arrangement.group }}</p>
-                <p>{{ arrangement.startDate }} — {{ arrangement.endDate }}</p>
+                <p>{{ placeLabel(arrangement.place) }} • {{ groupLabel(arrangement.group) }}</p>
+                <p>{{ arrangement.startDate }} - {{ arrangement.endDate }}</p>
                 <p>{{ arrangement.price }} €</p>
 
                 @if (canCancel(arrangement)) {
@@ -48,9 +51,12 @@ interface VisitedItem {
             @for (visited of visitedDestinations; track trackByArrangement($index, visited.arrangement)) {
               <div class="arrangement-item">
                 <h3>{{ visited.arrangement.title }}</h3>
-                <p>{{ visited.arrangement.place }} • {{ visited.arrangement.group }}</p>
-                <p>{{ t('rating') }}</p>
-                <div class="rating-row">
+                <p>{{ placeLabel(visited.arrangement.place) }} • {{ groupLabel(visited.arrangement.group) }}</p>
+                <p>{{ visited.arrangement.startDate }} - {{ visited.arrangement.endDate }}</p>
+
+                <p class="rating-label">{{ t('rating') }} <strong>{{ visited.rating ?? 0 }}/5</strong></p>
+
+                <div class="rating-row" [attr.aria-label]="t('ratingAria')">
                   @for (star of stars; track star) {
                     <button
                       type="button"
@@ -75,6 +81,19 @@ interface VisitedItem {
         max-width: 1200px;
         margin: 0 auto;
         padding: 24px 16px;
+      }
+
+      .account-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+
+      .account-header h1 {
+        margin: 0;
       }
 
       .account-grid {
@@ -109,6 +128,10 @@ interface VisitedItem {
         color: var(--color-text-secondary);
       }
 
+      .rating-label {
+        margin-top: 10px;
+      }
+
       .empty-state,
       .hint {
         color: var(--color-text-muted);
@@ -117,6 +140,7 @@ interface VisitedItem {
       .rating-row {
         display: flex;
         gap: 6px;
+        margin-top: 6px;
       }
 
       .rating-btn {
@@ -149,11 +173,20 @@ export class AccountPageComponent implements OnInit {
 
   constructor(
     private readonly accountService: AccountService,
+    private readonly arrangements: ArrangementsService,
     readonly lang: LanguageService
   ) {}
 
   ngOnInit(): void {
     this.refreshData();
+  }
+
+  placeLabel(place: string): string {
+    return this.arrangements.translatePlace(place, this.lang.currentLang());
+  }
+
+  groupLabel(group: string): string {
+    return this.arrangements.translateGroup(group, this.lang.currentLang());
   }
 
   canCancel(arrangement: Arrangement): boolean {
@@ -170,7 +203,18 @@ export class AccountPageComponent implements OnInit {
     this.refreshData();
   }
 
-  t(key: 'title' | 'reserved' | 'noReserved' | 'cancel' | 'cancelHint' | 'visited' | 'noVisited' | 'rating'): string {
+  t(
+    key:
+      | 'title'
+      | 'reserved'
+      | 'noReserved'
+      | 'cancel'
+      | 'cancelHint'
+      | 'visited'
+      | 'noVisited'
+      | 'rating'
+      | 'ratingAria'
+  ): string {
     const isSr = this.lang.currentLang() === 'sr';
 
     const labels = {
@@ -181,7 +225,8 @@ export class AccountPageComponent implements OnInit {
       cancelHint: isSr ? 'Отказивање није могуће мање од 5 дана пре почетка.' : 'Cancellation is not available less than 5 days before start.',
       visited: isSr ? 'Посећене дестинације' : 'Visited destinations',
       noVisited: isSr ? 'Још увек нема посећених дестинација.' : 'There are no visited destinations yet.',
-      rating: isSr ? 'Оцена:' : 'Rating:'
+      rating: isSr ? 'Оцена:' : 'Rating:',
+      ratingAria: isSr ? 'Оцени аранжман од 1 до 5' : 'Rate arrangement from 1 to 5'
     };
 
     return labels[key];

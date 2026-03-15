@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Arrangement } from './arrangements.service';
+import { Arrangement, ArrangementsService } from './arrangements.service';
 
 interface VisitedItem {
   arrangement: Arrangement;
@@ -13,17 +13,46 @@ const VISITED_KEY = 'travel-agency.visited';
   providedIn: 'root'
 })
 export class AccountService {
-  constructor() {
+  constructor(private readonly arrangements: ArrangementsService) {
     this.ensureStorageShape();
+    this.ensureSeedVisited();
   }
 
   getReserved(): Arrangement[] {
-    const reserved = this.readFromStorage<Arrangement[]>(RESERVED_KEY, []);
-    return reserved;
+    return this.readFromStorage<Arrangement[]>(RESERVED_KEY, []);
   }
 
   getVisited(): VisitedItem[] {
     return this.readFromStorage<VisitedItem[]>(VISITED_KEY, []);
+  }
+
+  isReserved(arrangement: Arrangement): boolean {
+    return this.getReserved().some(item => this.isSameArrangement(item, arrangement));
+  }
+
+  reserve(arrangement: Arrangement): boolean {
+    const reserved = this.getReserved();
+    if (reserved.some(item => this.isSameArrangement(item, arrangement))) {
+      return false;
+    }
+
+    this.writeToStorage(RESERVED_KEY, [...reserved, arrangement]);
+    return true;
+  }
+
+  getAverageRating(arrangement: Arrangement): number {
+    const visited = this.getVisited();
+    const ratings = visited
+      .filter(v => this.isSameArrangement(v.arrangement, arrangement))
+      .map(v => v.rating)
+      .filter((r): r is number => typeof r === 'number' && r >= 1 && r <= 5);
+
+    if (ratings.length === 0) {
+      return 0;
+    }
+
+    const avg = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+    return Math.round(avg * 10) / 10;
   }
 
   canCancel(arrangement: Arrangement): boolean {
@@ -41,10 +70,12 @@ export class AccountService {
   }
 
   rateVisited(arrangement: Arrangement, rating: number): void {
+    const clamped = Math.max(1, Math.min(5, Math.round(rating)));
+
     const visited = this.getVisited();
     const nextVisited = visited.map(item => {
       if (this.isSameArrangement(item.arrangement, arrangement)) {
-        return { ...item, rating };
+        return { ...item, rating: clamped };
       }
 
       return item;
@@ -53,20 +84,27 @@ export class AccountService {
     this.writeToStorage(VISITED_KEY, nextVisited);
   }
 
-  syncExpiredReservations(): void {
+  syncExpiredReservations(now: Date = new Date()): void {
     const reserved = this.getReserved();
     if (reserved.length === 0) {
       return;
     }
 
     const visited = this.getVisited();
-    const today = this.startOfDay(new Date());
+    const today = this.startOfDay(now);
 
     const remainingReservations: Arrangement[] = [];
     const nextVisited = [...visited];
 
     for (const arrangement of reserved) {
-      const endDate = this.startOfDay(new Date(arrangement.endDate));
+      const end = new Date(arrangement.endDate);
+      if (Number.isNaN(end.getTime())) {
+        // invalid end date, keep in reserved
+        remainingReservations.push(arrangement);
+        continue;
+      }
+
+      const endDate = this.startOfDay(end);
       if (endDate < today) {
         const alreadyVisited = nextVisited.some(item => this.isSameArrangement(item.arrangement, arrangement));
         if (!alreadyVisited) {
@@ -87,6 +125,27 @@ export class AccountService {
 
     this.writeToStorage(RESERVED_KEY, reserved);
     this.writeToStorage(VISITED_KEY, visited);
+  }
+
+  private ensureSeedVisited(): void {
+    const existing = this.readFromStorage<VisitedItem[]>(VISITED_KEY, []);
+    if (existing.length > 0) {
+      return;
+    }
+
+    const all = this.arrangements.getAll();
+    const pick = (id: string) => all.find(a => a.id === id) ?? null;
+
+    const a1 = pick('evropa-london-haversham-court');
+    const a2 = pick('leto-2025-valensia-playa-del-sol');
+
+    const seed: VisitedItem[] = [];
+    if (a1) seed.push({ arrangement: { ...a1, title: `Past opportunity: ${a1.title}` }, rating: 4 });
+    if (a2) seed.push({ arrangement: { ...a2, title: `Past opportunity: ${a2.title}` }, rating: 5 });
+
+    if (seed.length > 0) {
+      this.writeToStorage(VISITED_KEY, seed);
+    }
   }
 
   private isSameArrangement(first: Arrangement, second: Arrangement): boolean {

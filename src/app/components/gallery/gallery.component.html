@@ -1,7 +1,39 @@
-<section class="gallery-grid">
-    @for (image of allImages; track image) {
+<section class="gallery-page">
+  <header class="gallery-header">
+    <h1>{{ t('title') }}</h1>
+  </header>
+
+  <section class="video-section">
+    <h2>{{ t('videoTitle') }}</h2>
+
+    <div class="video-grid">
+      @for (v of videos; track v.url) {
+        <article class="video-card">
+          <h3>{{ videoLabel(v) }}</h3>
+          <div class="video-wrap">
+            <iframe
+              [title]="videoLabel(v)"
+              [src]="v.url"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="images-section">
+    <h2>{{ t('imagesTitle') }}</h2>
+
+    <section class="gallery-grid">
+      @for (image of allImages; track image) {
         <div class="gallery-card">
-            <img [src]="image" alt="Gallery image">
+          <img [src]="image" alt="Gallery image" loading="lazy">
         </div>
-    }
+      }
+    </section>
+  </section>
 </section>
